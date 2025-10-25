@@ -57,6 +57,59 @@ The accuracy of each model on the unseen test data was as follows:
 | **Logistic Regression** | **84.4%** |
 | **Decision Tree** | **83.4%** |
 
-## Final Deliverable
+## How to Use
+
+There are two ways to use this project:
+
+### 1. Re-run the Analysis (Recommended)
+
+You can run the Jupyter Notebook (`HeartDieses.ipynb`) to see the full analysis, from data loading to model evaluation.
+
+**Prerequisites:**
+* Python 3.x
+* Jupyter Notebook (or VS Code with the Jupyter extension)
+* Required libraries. You can install them using pip:
+  ```bash
+  pip install pandas scikit-learn seaborn matplotlib xgboost
+
+  ### 2. Use the Pre-Trained Model (`heart_disease_model.pkl`)
+
+The final, 100% accurate XGBoost model is saved as `heart_disease_model.pkl`. You can load this file into any Python application to make predictions.
+
+**Important:** This model was trained on data that was **scaled** and **encoded**. To use it for a new prediction, you must feed it data in the *exact same format*. The model expects a **6-feature** input, scaled using the `StandardScaler` and encoded as seen in the notebook.
+
+**Code Example:**
+
+```python
+import pickle
+import pandas as pd
+
+# Load the trained model
+with open('heart_disease_model.pkl', 'rb') as file:
+    model = pickle.load(file)
+
+# Create a DataFrame for a new patient.
+# NOTE: These values MUST be pre-processed and scaled
+# exactly as they were in the training notebook.
+# This example uses the scaled values for the first patient in the dataset.
+
+new_patient_scaled = pd.DataFrame({
+    'Max_heart_rate': [0.821],
+    'oldpeak': [-0.060],
+    'vessels_colored_by_flourosopy': [1.209],
+    'chest_pain_type_Typical angina': [1.030],
+    'thalassemia_Reversable Defect': [1.224],
+    'cholestoral': [-0.659]
+})
+
+# Make a prediction
+prediction = model.predict(new_patient_scaled)
+
+if prediction[0] == 1:
+    print("Prediction: Heart Disease Present")
+else:
+    print("Prediction: No Heart Disease")
+
+# Final Deliverable
 
 * **`heart_disease_model.pkl`**: This is the final, trained XGBoost model. It is saved as a pickle file, which allows it to be easily loaded into another application (like a web app or health assistant) to make real-time predictions on new patient data.
